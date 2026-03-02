@@ -1,8 +1,8 @@
 ---
 name: docs-creator
-description: Claude Code 문서 작성. CLAUDE.md, SKILL.md, COMMAND.md 효율적 작성.
+description: AI 코딩 도구 문서 작성. Claude용 CLAUDE.md, Codex/OpenCode용 AGENTS.md, SKILL.md, COMMAND.md를 일관된 규칙으로 작성.
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Docs Creator Skill
@@ -15,10 +15,22 @@ metadata:
 
 | 상황            | 작성 필요   |
 | --------------- | ----------- |
-| **새 프로젝트** | CLAUDE.md   |
+| **새 프로젝트 (Claude)** | CLAUDE.md   |
+| **새 프로젝트 (Codex/OpenCode)** | AGENTS.md |
 | **새 스킬**     | SKILL.md    |
 | **새 커맨드**   | COMMAND.md  |
 | **규칙 추가**   | rules/\*.md |
+
+---
+
+## 도구별 루트 지시문
+
+| 도구 | 루트 파일 |
+| --- | --- |
+| Claude Code | `CLAUDE.md` |
+| OpenAI Codex | `AGENTS.md` |
+| OpenCode | `AGENTS.md` |
+| Gemini CLI | `GEMINI.md` |
 
 ---
 
@@ -113,17 +125,35 @@ Task(subagent_type="explore", model="haiku", prompt="기존 규칙 분석")
 // 복사 가능 패턴
 const fn = (): ReturnType => { ... }
 ```
-````
-
 </quick_patterns>
 
 ````
 
 ---
 
-### SKILL.md
+### AGENTS.md
 
 ```markdown
+# AGENTS.md - [프로젝트명]
+
+## Overview
+[프로젝트 목적 1-2문장]
+
+## Working Rules
+- Keep functions small and testable.
+- Validate external API payloads.
+- Follow project lint/type rules before commit.
+
+## Context Routing
+- **Frontend changes**: read `./apps/web/AGENTS.md`
+- **Backend changes**: read `./services/api/AGENTS.md`
+```
+
+---
+
+### SKILL.md
+
+````markdown
 ---
 name: skill-name
 description: 한 줄 설명
@@ -149,10 +179,10 @@ description: 한 줄 설명
 <examples>
 ```typescript
 // 실행 가능 코드
-````
+```
 
 </examples>
-```
+````
 
 ---
 
@@ -188,7 +218,7 @@ argument-hint: <인자>
 
 | Step  | 작업                                        | 도구       |
 | ----- | ------------------------------------------- | ---------- |
-| **1** | 유형 결정, 구조 파악                        | Glob, Read |
+| **1** | 문서 유형 결정(CLAUDE/AGENTS/SKILL/COMMAND), 구조 파악 | Glob, Read |
 | **2** | 규칙 추출 (forbidden → required → patterns) | Grep       |
 | **3** | 작성 (XML 태그, 표, 코드, @imports)         | Write      |
 | **4** | 검증 (체크리스트)                           | -          |
