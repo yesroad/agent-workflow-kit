@@ -1,11 +1,16 @@
 # Claude Code 로컬 설정 (개인 권한 포함)
 .claude/settings.local.json
+src/settings.local.json
 
 # 임시 작업 파일
 .claude/temp/
+src/temp/
 
 # 대화 간 지속 메모 (프로젝트별 내용 포함 가능)
 .claude/memory/
+
+# MCP 서버 설정 (API 토큰 포함)
+mcp.json
 
 # macOS
 .DS_Store
