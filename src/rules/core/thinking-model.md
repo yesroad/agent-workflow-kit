@@ -199,6 +199,8 @@ rg "Typography" src/ --type tsx | head -10
 
 ### 필수 검증 명령어 (코드 수정 후)
 
+> **패키지 매니저**: lock 파일 기준 자동 감지 — `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm
+
 ```bash
 # 타입 에러 확인 (런타임 에러 사전 방지)
 {패키지매니저} tsc --noEmit
@@ -267,56 +269,11 @@ rg "Typography" src/ --type tsx | head -10
 
 ---
 
-## 에이전트 연계
-
-**상세**: `@../../instructions/multi-agent/agent-roster.md`
-
-| 단계      | 활용 에이전트              | 모델          |
-| --------- | -------------------------- | ------------- |
-| READ      | explore (병렬 탐색)        | haiku         |
-| ANALYZE   | explore, code-reviewer     | haiku, sonnet |
-| STRUCTURE | Plan (HIGH 복잡도)         | opus          |
-| 구현      | implementation-executor    | sonnet        |
-| REFLECT   | lint-fixer, code-reviewer  | haiku, sonnet |
-
-### 병렬 실행 패턴
-
-독립 작업은 단일 메시지에서 병렬 호출:
-
-```typescript
-// READ 단계: 병렬 탐색
-Task(
-  (subagent_type = "explore"),
-  (model = "haiku"),
-  (prompt = "대상 도메인 코드 구조 분석"),
-);
-Task(
-  (subagent_type = "explore"),
-  (model = "haiku"),
-  (prompt = "공유 패키지 의존성 분석"),
-);
-
-// REFLECT 단계: 병렬 검증
-Task((subagent_type = "lint-fixer"), (model = "haiku"), (prompt = "린트 수정"));
-Task((subagent_type = "code-reviewer"), (model = "sonnet"), (prompt = "코드 리뷰"));
-```
-
----
-
 ## 참조 문서
 
 | 문서                                                           | 용도           |
 | -------------------------------------------------------------- | -------------- |
 | `@../../instructions/multi-agent/coordination-guide.md`        | 병렬 실행 원칙 |
+| `@../../instructions/multi-agent/model-routing.md`             | 에이전트 모델 선택 |
 | `@../../instructions/workflow-patterns/sequential-thinking.md` | 복잡도별 단계  |
 | `@../../instructions/validation/forbidden-patterns.md`         | 금지 패턴      |
-
----
-
-## 발전 이력
-
-이 모델은 실제 작업 경험을 바탕으로 지속적으로 개선된다.
-
-| 날짜    | 변경 내용 |
-| ------- | --------- |
-| 2026-02 | 산규 생성 |

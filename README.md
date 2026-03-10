@@ -121,15 +121,15 @@ src/
 
 각 툴에 맞는 파일만 복사되며, 비호환 필드는 자동으로 변환됩니다.
 
-| 디렉토리              | Claude  | Cursor           | OpenCode |  Codex           |
-| --------------------- | :-----: | :--------------: | :------: | :--------------: |
-| `hooks/`              |   ✅    |       ✅         |    ❌    |       ✅         |
-| `plugins/`            |   ❌    |       ❌         |    ✅    |       ❌         |
-| `agents/`             | ✅ 원본 |    ✅ 원본       | ✅ 변환  |    ✅ 변환       |
-| `rules/`              |   ✅    |       ✅         |    ✅    |       ✅         |
-| `skills/`             | ✅ `.claude/skills/` | ✅ `.agents/skills/` | ✅ `.opencode/skills/` | ✅ `.agents/skills/` |
-| `commands/`           |   ✅    |       ✅         |    ✅    |       ✅         |
-| `settings.json`       |   ✅    |       ❌         |    ❌    |       ❌         |
+| 디렉토리        |        Claude        |        Cursor        |        OpenCode        |        Codex         |
+| --------------- | :------------------: | :------------------: | :--------------------: | :------------------: |
+| `hooks/`        |          ✅          |          ✅          |           ❌           |          ✅          |
+| `plugins/`      |          ❌          |          ❌          |           ✅           |          ❌          |
+| `agents/`       |       ✅ 원본        |       ✅ 원본        |        ✅ 변환         |       ✅ 변환        |
+| `rules/`        |          ✅          |          ✅          |           ✅           |          ✅          |
+| `skills/`       | ✅ `.claude/skills/` | ✅ `.agents/skills/` | ✅ `.opencode/skills/` | ✅ `.agents/skills/` |
+| `commands/`     |          ✅          |          ✅          |           ✅           |          ✅          |
+| `settings.json` |          ✅          |          ❌          |           ❌           |          ❌          |
 
 > **agents/ 변환 내용**
 >

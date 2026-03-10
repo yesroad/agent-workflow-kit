@@ -188,6 +188,8 @@ git diff HEAD~5 -- {관련파일}
 
 선택된 옵션에 따라 수정 (사용자 선택 후 진행):
 
+> **패키지 매니저**: lock 파일 기준 자동 감지 — `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm (없으면 npm)
+
 ```typescript
 // 수정 전 테스트 확인
 Bash("{패키지매니저} test -- --testPathPattern='{관련테스트}'");
@@ -230,7 +232,7 @@ Bash("{패키지매니저} build");
 - 미가용 시 Task 병렬 호출로 폴백
 - 같은 파일 동시 수정은 금지 (충돌 위험)
 
-### Agent Teams 모드 (Claude Max)
+### Agent Teams 모드
 
 복잡한 버그 (HIGH) 분석 시 팀 기반 병렬 협업:
 

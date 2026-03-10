@@ -132,6 +132,8 @@ describe('마이그레이션 전 정책 보호', () => {
 
 테스트가 이미 있으면 현재 통과 여부 먼저 확인:
 
+> **패키지 매니저**: lock 파일 기준 자동 감지 — `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm (없으면 npm)
+
 ```bash
 {패키지매니저} test
 ```

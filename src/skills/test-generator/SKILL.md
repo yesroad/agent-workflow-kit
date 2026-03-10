@@ -150,6 +150,8 @@ jest.mock('@/lib/api', () => ({
 
 ### Phase 4: 테스트 실행 및 검증
 
+> **패키지 매니저**: lock 파일 기준 자동 감지 — `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm (없으면 npm)
+
 ```bash
 # 커버리지 포함 실행 (항상)
 {패키지매니저} test -- --coverage --testPathPattern="{파일명}.test" --coverageReporters=text

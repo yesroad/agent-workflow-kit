@@ -129,6 +129,8 @@ Task(subagent_type="explore", model="haiku", prompt="변경 대상 파일 분석
 
 구현 완료 후:
 
+> **패키지 매니저**: lock 파일 기준 자동 감지 — `yarn.lock` → yarn, `pnpm-lock.yaml` → pnpm, `package-lock.json` → npm (없으면 npm)
+
 ```bash
 # 린트/타입 체크
 {패키지매니저} lint
