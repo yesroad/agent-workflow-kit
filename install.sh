@@ -21,7 +21,11 @@ AI_KIT_CACHE="$HOME/.config/ai-rules-kit"
 AI_KIT_DEFAULT_BRANCH="${AI_KIT_DEFAULT_BRANCH:-main}"
 
 resolve_script_dir() {
-  local script_source="${BASH_SOURCE[0]-${0-}}"
+  local script_source
+  # curl | bash 실행 시 BASH_SOURCE[0]이 unset일 수 있으므로 set -u를 잠시 해제
+  set +u
+  script_source="${BASH_SOURCE[0]:-${0:-}}"
+  set -u
 
   case "$script_source" in
     ""|bash|-bash|sh|-sh)
@@ -57,14 +61,15 @@ refresh_cached_repo() {
     return
   fi
 
-  if git -C "$AI_KIT_CACHE" fetch --depth=1 origin "$AI_KIT_DEFAULT_BRANCH" > /dev/null 2>&1 && \
-     git -C "$AI_KIT_CACHE" merge --ff-only FETCH_HEAD > /dev/null 2>&1; then
+  if git -C "$AI_KIT_CACHE" fetch --depth=1 origin "$AI_KIT_DEFAULT_BRANCH" > /dev/null 2>&1; then
+    # divergent 상태(fast-forward 불가) 포함 모든 경우에 reset --hard로 원격 상태로 동기화
+    git -C "$AI_KIT_CACHE" reset --hard FETCH_HEAD > /dev/null 2>&1
     return
   fi
 
   backup="${AI_KIT_CACHE}.bak.$(date +%Y%m%d%H%M%S)"
   mv "$AI_KIT_CACHE" "$backup"
-  echo "캐시 브랜치가 분기되어 새로 다운로드합니다. 이전 캐시 백업: $backup"
+  echo "캐시 업데이트 실패, 새로 다운로드합니다. 이전 캐시 백업: $backup"
   git clone --depth=1 --branch "$AI_KIT_DEFAULT_BRANCH" "$REMOTE_REPO" "$AI_KIT_CACHE"
 }
 
