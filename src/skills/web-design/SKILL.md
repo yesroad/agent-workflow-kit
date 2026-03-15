@@ -13,12 +13,12 @@ description: 2025-2026 트렌드를 반영한 웹/앱 UI를 Next.js + TailwindCS
 
 작업 디렉토리의 `package.json`을 읽어 다음을 확인하세요:
 
-| 항목 | 확인 내용 | 영향 |
-|------|----------|------|
-| `next` 버전 | v14 vs v15 | v15는 `params`, `searchParams`, `cookies()`, `headers()` 모두 async |
-| `tailwindcss` 버전 | v3 vs v4 | v4는 `tailwind.config.ts` 대신 `globals.css @theme` CSS-first 방식 |
-| `framer-motion` | 설치 여부 | 고급 인터랙션(패럴랙스, 키네틱 타이포) 사용 가능 여부 |
-| `shadcn/ui` | 설치 여부 (`@/components/ui`) | 베이스 컴포넌트 사용 가능 여부 |
+| 항목               | 확인 내용                     | 영향                                                                |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------- |
+| `next` 버전        | v14 vs v15                    | v15는 `params`, `searchParams`, `cookies()`, `headers()` 모두 async |
+| `tailwindcss` 버전 | v3 vs v4                      | v4는 `tailwind.config.ts` 대신 `globals.css @theme` CSS-first 방식  |
+| `framer-motion`    | 설치 여부                     | 고급 인터랙션(패럴랙스, 키네틱 타이포) 사용 가능 여부               |
+| `shadcn/ui`        | 설치 여부 (`@/components/ui`) | 베이스 컴포넌트 사용 가능 여부                                      |
 
 **이 스킬의 기본값은 Tailwind v4 + Next.js v15입니다.** package.json에서 다른 버전이 확인되면 해당 버전에 맞는 문법으로 전환하세요.
 
@@ -39,6 +39,7 @@ description: 2025-2026 트렌드를 반영한 웹/앱 UI를 Next.js + TailwindCS
 ## Step 2: 디자인 스타일 선택 제안
 
 **다음 중 하나라도 해당하면 Step 3으로 바로 진행하세요:**
+
 - 스타일/분위기 키워드가 명시된 경우 (예: "어두운", "미니멀", "파스텔", "어스톤", "레트로")
 - 단일 컴포넌트 요청
 - 기존 프로젝트에 컴포넌트를 추가하는 경우
@@ -96,16 +97,108 @@ C. 소프트 파스텔
 
 Mobile-First로 설계하세요. Tailwind 브레이크포인트 기준:
 
-| 접두사 | min-width | 대상 |
-|--------|-----------|------|
-| (기본) | 0px | 모바일 |
-| `sm` | 640px | 대형 폰 / 소형 태블릿 |
-| `md` | 768px | 태블릿 |
-| `lg` | 1024px | 소형 데스크톱 |
-| `xl` | 1280px | 대형 데스크톱 |
-| `2xl` | 1536px | 울트라와이드 |
+| 접두사 | min-width | 대상                  |
+| ------ | --------- | --------------------- |
+| (기본) | 0px       | 모바일                |
+| `sm`   | 640px     | 대형 폰 / 소형 태블릿 |
+| `md`   | 768px     | 태블릿                |
+| `lg`   | 1024px    | 소형 데스크톱         |
+| `xl`   | 1280px    | 대형 데스크톱         |
+| `2xl`  | 1536px    | 울트라와이드          |
 
 Tailwind v4에서는 `@container` 쿼리가 기본 내장됩니다. 컴포넌트가 부모 크기에 따라 레이아웃을 바꿔야 할 때 `@container` + `@sm:` / `@md:` 활용을 적극 검토하세요.
+
+---
+
+## Step 3.5: HTML 목업 작성 및 사용자 확인 (필수)
+
+> **왜 필수인가?** HTML 목업은 "디자인 계약서"입니다. React 구현 전에 색상·레이아웃·상태(state)·인터랙션을 사용자와 합의해두면, 컴포넌트 구현 중 방향 수정이 없어집니다. 작은 수정(텍스트 정렬, 색상 변경, 요소 제거)을 HTML에서 하는 것이 React 코드를 고치는 것보다 훨씬 빠릅니다.
+
+**다음 경우에만 생략 가능:**
+
+- 단일 버튼/뱃지처럼 명백히 단순한 컴포넌트 1개 추가
+- 사용자가 "목업 없이 바로 구현해줘"라고 명시한 경우
+
+### 목업 파일 생성 규칙
+
+파일 위치: `docs/{project-name}-mockup.html`
+(docs 폴더가 없으면 프로젝트 루트에 `{project-name}-mockup.html`로 저장)
+
+### 목업에 반드시 포함할 내용
+
+**1. 상단 목업 네비게이션 바**
+
+```html
+<!-- 목업임을 명확히 표시 -->
+<nav
+  style="position:fixed; top:0; background:#1a1a1a; color:#fff; padding:8px 16px; font-size:13px; z-index:9999; display:flex; gap:8px; align-items:center;"
+>
+  <span
+    style="background:#c4724a; color:#fff; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:700;"
+    >MOCKUP</span
+  >
+  <span>{프로젝트명} — UI 목업</span>
+</nav>
+```
+
+**2. 디자인 시스템 섹션 (컬러 팔레트 스와치)**
+선택한 스타일의 주요 컬러를 시각적으로 표시
+
+**3. 모든 컴포넌트를 개별 섹션으로**
+각 섹션마다 점선 테두리 + 라벨로 구분:
+
+```html
+<div
+  style="border: 2px dashed #ddd; border-radius:12px; padding:24px; margin-bottom:32px; position:relative;"
+>
+  <span
+    style="position:absolute; top:-12px; left:16px; background:#333; color:#fff; font-size:11px; padding:3px 10px; border-radius:99px; text-transform:uppercase;"
+    >ComponentName</span
+  >
+  <!-- 컴포넌트 내용 -->
+</div>
+```
+
+**4. 각 컴포넌트의 주요 상태 표시**
+
+| 상태          | 설명                                |
+| ------------- | ----------------------------------- |
+| 기본          | 기본 렌더링 상태                    |
+| hover         | CSS `:hover`로 마우스 오버 효과     |
+| 로딩/스켈레톤 | shimmer 애니메이션 (데이터 패칭 UI) |
+| 비어있음      | 결과 없음 / 초기 상태               |
+| 에러          | 실패/경고 상태 (해당하는 경우)      |
+
+**5. 전체 레이아웃 미리보기 섹션**
+실제 페이지처럼 조합된 최종 레이아웃을 마지막에 표시
+
+### 목업 CSS 원칙
+
+- **외부 의존성 없이** 순수 HTML + CSS + 인라인 스타일만 사용 (브라우저에서 즉시 열 수 있어야 함)
+- CSS 변수로 컬러 토큰 정의 (`--color-primary` 등)
+- hover 효과는 CSS만으로 구현 (JS 최소화)
+- `break-keep: always`로 한국어 줄바꿈 처리
+- 스켈레톤 shimmer는 `@keyframes` + `background: linear-gradient(90deg, ...)` 패턴 사용
+
+### 사용자 확인 절차
+
+목업 파일 생성 후 **반드시 다음 메시지로 사용자에게 확인을 요청**하세요:
+
+```
+docs/{파일명}.html 에 목업을 생성했습니다.
+브라우저에서 열어서 확인해보세요.
+
+수정하고 싶은 부분이 있으면 말씀해 주세요.
+확정되면 React 컴포넌트 구현을 시작하겠습니다.
+```
+
+**사용자가 수정을 요청하면:**
+
+- HTML 파일만 수정 (React 코드 작성 금지)
+- 수정 완료 후 다시 확인 요청
+
+**사용자가 확인("좋아", "진행하자", "OK" 등)하면:**
+→ Step 4로 진행
 
 ---
 
@@ -124,13 +217,13 @@ Tailwind v4에서는 `@container` 쿼리가 기본 내장됩니다. 컴포넌트
 
 @theme {
   /* 어스톤 스타일 예시 — 선택된 스타일에 맞게 교체 */
-  --color-mocha: #9E7B5A;
-  --color-mocha-light: #C4A882;
-  --color-mocha-dark: #7D5F42;
-  --color-mocha-deep: #5C3D2E;
-  --color-cream: #FAF7F2;
-  --color-sage: #8FAF7E;
-  --color-terracotta: #C4724A;
+  --color-mocha: #9e7b5a;
+  --color-mocha-light: #c4a882;
+  --color-mocha-dark: #7d5f42;
+  --color-mocha-deep: #5c3d2e;
+  --color-cream: #faf7f2;
+  --color-sage: #8faf7e;
+  --color-terracotta: #c4724a;
 
   /* 폰트 (next/font 변수와 연결) */
   --font-sans: var(--font-pretendard), sans-serif;
@@ -140,33 +233,40 @@ Tailwind v4에서는 `@container` 쿼리가 기본 내장됩니다. 컴포넌트
   --animate-shake: shake 0.3s ease-in-out;
 
   @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25%  { transform: translateX(-4px); }
-    75%  { transform: translateX(4px); }
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-4px);
+    }
+    75% {
+      transform: translateX(4px);
+    }
   }
 }
 
 /* 다크모드 CSS 변수 전환 */
 :root {
-  --background: #FAF7F2;
+  --background: #faf7f2;
   --foreground: #1c140e;
   --card: #ffffff;
   --border: #dcd2c8;
   --muted: #f5efe0;
   --muted-foreground: #78644f;
-  --primary: #9E7B5A;
+  --primary: #9e7b5a;
   --primary-foreground: #ffffff;
 }
 
 .dark {
-  --background: #0A0E1A;
-  --foreground: #E2E8F0;
-  --card: #1A2235;
-  --border: #2D3A52;
+  --background: #0a0e1a;
+  --foreground: #e2e8f0;
+  --card: #1a2235;
+  --border: #2d3a52;
   --muted: #111827;
-  --muted-foreground: #94A3B8;
-  --primary: #00FF87;
-  --primary-foreground: #0A0E1A;
+  --muted-foreground: #94a3b8;
+  --primary: #00ff87;
+  --primary-foreground: #0a0e1a;
 }
 ```
 
@@ -244,18 +344,21 @@ className="break-keep"
 코드 생성 직후, Step 5 출력 전에 반드시 점검하세요. `references/spacing.md` 참고.
 
 **스페이싱 체크:**
+
 - 모든 여백/패딩/간격이 4 또는 8의 배수인가? (4, 8, 16, 24, 32, 40, 48, 64, 96px)
 - 컴포넌트 내부 패딩 ≤ 컴포넌트 간 여백인가?
 - 헤드라인 주변 여백이 충분한가? (기존 대비 20% 이상)
 - 모바일/태블릿/데스크톱 여백이 단계별로 올바른가?
 
 **타이포그래피 체크:**
+
 - 버튼 padding이 텍스트에 비례하는가? (최소 44×44px 터치 타겟)
 - 본문 줄 간격이 1.5 이상인가?
 - 폰트 크기가 `clamp()`로 유체 대응하는가?
 - 나란히 배치된 요소들의 `gap`이 일관적인가?
 
 **레이아웃 체크:**
+
 - 가격·버튼 등 밀도 높은 영역에서 요소가 잘리거나 넘치지 않는가?
 - 한국어 텍스트에 `break-keep`이 적용되었는가?
 - `text-center` 단락 마지막 줄에 단어 한두 개만 남지 않는가?
@@ -294,23 +397,27 @@ className="break-keep"
 # Design Summary
 
 ## 스타일
+
 [선택된 스타일과 선택 이유]
 
 ## 레이아웃
+
 [사용한 레이아웃 패턴과 이유]
 
 ## 컬러 팔레트
+
 [주요 컬러와 선택 이유]
 
 ## 인터랙션
+
 [적용한 인터랙션과 이유]
 ```
 
 ### 5. 추가 설치 패키지 (있을 경우)
 
 ```bash
-npm install framer-motion        # 고급 인터랙션 시
-npm install next-themes          # 다크모드 시
+yarn add framer-motion        # 고급 인터랙션 시
+yarn add next-themes          # 다크모드 시
 npx shadcn@latest add [컴포넌트]
 ```
 

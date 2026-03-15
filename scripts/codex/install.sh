@@ -34,3 +34,6 @@ log_success "설치 후 참조 경로 보정"
 
 create_codex_agents_md "$SOURCE_DIR" "$TARGET_DIR/.codex/AGENTS.md"
 log_success ".codex/AGENTS.md 생성"
+
+create_codex_root_agents_md "$TARGET_DIR"
+log_success "루트 AGENTS.md 준비"

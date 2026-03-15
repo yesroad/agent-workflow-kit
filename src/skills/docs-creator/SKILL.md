@@ -114,6 +114,7 @@ Task(subagent_type="explore", model="haiku", prompt="기존 규칙 분석")
 ---
 
 <tech_stack>
+<!-- CLAUDE.md 예시에만 사용. AGENTS.md에는 package.json에서 알 수 있는 기술 스택 목록을 반복하지 않습니다. -->
 | 기술 | 버전 | 주의 |
 |------|------|------|
 | TypeScript | 5.x | strict |
@@ -147,8 +148,9 @@ const fn = (): ReturnType => { ... }
 - Follow project lint/type rules before commit.
 
 ## Context Routing
-- **Frontend changes**: read `./apps/web/AGENTS.md`
-- **Backend changes**: read `./services/api/AGENTS.md`
+- Add only nested instruction files that actually exist in the target repo.
+- Example: `./apps/admin/AGENTS.md`
+- Example: `./services/api/AGENTS.md`
 ```
 
 ---

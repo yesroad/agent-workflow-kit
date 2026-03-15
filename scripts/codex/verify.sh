@@ -27,9 +27,16 @@ patterns=(
 )
 
 for pattern in "${patterns[@]}"; do
-  if rg -n "$pattern" "$TARGET_DIR" -S >/dev/null 2>&1; then
+  rg_args=("$TARGET_DIR" "-S")
+  case "$pattern" in
+    '\.claude/'|'@\.claude/')
+      rg_args+=(-g '!**/skills/docs-creator/SKILL.md')
+      ;;
+  esac
+
+  if rg -n "$pattern" "${rg_args[@]}" >/dev/null 2>&1; then
     echo "금지 패턴 발견: $pattern"
-    rg -n "$pattern" "$TARGET_DIR" -S || true
+    rg -n "$pattern" "${rg_args[@]}" || true
     exit 1
   fi
 done
@@ -54,5 +61,18 @@ trap cleanup EXIT
 
 "$SCRIPT_DIR/install.sh" "$STAGE_DIR" "$TARGET_DIR" > /dev/null
 validate_installed_markdown_refs "$STAGE_DIR"
+
+[[ -f "$STAGE_DIR/AGENTS.md" ]] || fail "루트 AGENTS.md 없음"
+
+docs_creator="$STAGE_DIR/.agents/skills/docs-creator/SKILL.md"
+if [[ -f "$docs_creator" ]]; then
+  if rg -n '\| Codex \| `CLAUDE\.md` \|' "$docs_creator" -S >/dev/null 2>&1; then
+    fail "docs-creator에 잘못된 Codex/CLAUDE.md 매핑이 남아 있음"
+  fi
+
+  if rg -n '^\s*\.codex/docs/library/\[lib\]/index\.md$' "$docs_creator" -S >/dev/null 2>&1; then
+    fail "docs-creator의 CLAUDE.md 예제가 Codex 경로로 오염됨"
+  fi
+fi
 
 log_success "검증 완료"

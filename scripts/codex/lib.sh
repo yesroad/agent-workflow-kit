@@ -81,11 +81,19 @@ sanitize_markdown_file() {
     s/model\s*=\s*'"'"'sonnet'"'"'/reasoning = '"'"'medium'"'"'/g;
     s/model\s*=\s*'"'"'opus'"'"'/reasoning = '"'"'high'"'"'/g;
     s/Claude 직접/Codex 직접/g;
-    s/Claude Code/Codex/g;
     s/\bhaiku\b/low/g;
     s/\bsonnet\b/medium/g;
     s/\bopus\b/high/g;
   ' "$file"
+
+  case "$file" in
+    */skills/docs-creator/SKILL.md)
+      # Keep the embedded CLAUDE.md example intact in the Codex build.
+      perl -0pi -e '
+        s{^\s*\.codex/docs/library/\[lib\]/index\.md$}{@.claude/docs/library/[lib]/index.md}mg;
+      ' "$file"
+      ;;
+  esac
 }
 
 sanitize_markdown_tree() {
@@ -102,7 +110,8 @@ prune_codex_only_noise() {
         "$dir/settings.local.json" \
         "$dir/commands/setup-notifier.md" \
         "$dir/scripts/install-notifier.sh"
-  rm -rf "$dir/plugins"
+  rm -rf "$dir/hooks" \
+         "$dir/plugins"
 }
 
 create_codex_agents_md() {
@@ -191,6 +200,28 @@ create_codex_agents_md() {
       echo ""
     fi
   } > "$out"
+}
+
+create_codex_root_agents_md() {
+  local target_dir="$1"
+  local out="$target_dir/AGENTS.md"
+  local managed_header="# AI Kit — Root Instructions"
+
+  if [[ -f "$out" ]] && ! grep -qxF "$managed_header" <(head -n 1 "$out" 2>/dev/null); then
+    log_warn "루트 AGENTS.md가 이미 있어 유지합니다. .codex/AGENTS.md를 수동 병합하세요."
+    return 0
+  fi
+
+  cat > "$out" <<'EOF'
+# AI Kit — Root Instructions
+
+Codex로 작업할 때는 먼저 `./.codex/AGENTS.md`를 읽으세요.
+
+## Context Routing
+
+- 이 저장소에 실제로 존재하는 중첩 `AGENTS.md` 또는 `CLAUDE.md`만 추가로 읽으세요.
+- 설치된 Codex 상세 가이드: `./.codex/AGENTS.md`
+EOF
 }
 
 rewrite_installed_references() {

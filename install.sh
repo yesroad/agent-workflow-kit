@@ -7,7 +7,7 @@
 #   --claude   src/ 전체 복사                         → .claude/
 #   --cursor   src/ 복사 (skills 제외) + .agents/skills/ → .cursor/ + .agents/
 #   --opencode src/ 전체 복사 + AGENTS.md             → .opencode/
-#   --codex    src/ 마이그레이션 후 설치              → .build/codex-src/ → .codex/ + .agents/
+#   --codex    src/ 마이그레이션 후 설치              → .build/codex-src/ → AGENTS.md + .codex/ + .agents/
 #   --all      위 4개 모두
 #
 # 원격 실행 (curl | bash):
@@ -108,7 +108,7 @@ usage() {
   echo "  --claude    src/ 전체 복사 (Claude Code)"
   echo "  --cursor    src/ 복사 (plugins/, skills/, settings 제외) + .agents/skills/ (Cursor)"
   echo "  --opencode  src/ 전체 복사 (hooks/, settings 제외) + AGENTS.md (OpenCode)"
-  echo "  --codex     src/ 마이그레이션 후 설치 + .agents/skills/ + .codex/AGENTS.md (Codex)"
+  echo "  --codex     src/ 마이그레이션 후 설치 + AGENTS.md + .agents/skills/ + .codex/AGENTS.md (Codex)"
   echo "  --all       위 4개 모두"
   echo ""
   echo "target-dir: 설치 경로 (기본값: 현재 디렉토리)"

@@ -11,7 +11,7 @@
 | Claude Code | `--claude`   | `.claude/`                                         |
 | Cursor      | `--cursor`   | `.cursor/` + `.agents/skills/`                     |
 | OpenCode    | `--opencode` | `.opencode/` + `AGENTS.md`                         |
-| Codex       | `--codex`    | `src/` 마이그레이션 후 `.codex/` + `.agents/skills/` + `.codex/AGENTS.md` |
+| Codex       | `--codex`    | `src/` 마이그레이션 후 `AGENTS.md` + `.codex/` + `.agents/skills/` + `.codex/AGENTS.md` |
 
 ---
 
@@ -43,7 +43,7 @@ curl -fsSL https://raw.githubusercontent.com/yesroad/ai-rules-kit/main/install.s
   | bash -s -- --all .
 ```
 
-두 번째 실행부터는 `git pull`로 업데이트 후 설치합니다.
+두 번째 실행부터는 캐시를 최신 상태로 동기화(`git fetch + reset --hard`)한 뒤 설치합니다.
 
 ### 방법 2 — 로컬
 
@@ -61,7 +61,7 @@ cd ai-rules-kit
 ./install.sh --all /path/to/your-project
 ```
 
-설치 시 툴별로 필요한 파일만 복사됩니다. Cursor, Codex는 스킬을 `.agents/skills/`에 따로 설치하고, OpenCode, Codex는 `AGENTS.md`가 함께 생성되어 어떤 파일을 언제 참조할지 안내합니다. Codex는 설치 전에 `src/`의 Claude 전용 문법을 `.build/codex-src/`로 마이그레이션한 뒤 설치합니다.
+설치 시 툴별로 필요한 파일만 복사됩니다. Cursor, Codex는 스킬을 `.agents/skills/`에 따로 설치하고, OpenCode는 `.opencode/AGENTS.md`, Codex는 루트 `AGENTS.md`와 `.codex/AGENTS.md`가 함께 생성되어 어떤 파일을 언제 참조할지 안내합니다. Codex는 설치 전에 `src/`의 Claude 전용 문법을 `.build/codex-src/`로 마이그레이션한 뒤 설치합니다.
 
 ---
 
@@ -110,7 +110,7 @@ src/
 │   ├── validation/         # 금지 패턴, 필수 행동, 출시 게이트
 │   └── workflow-patterns/  # 복잡도별 작업 단계
 │
-├── hooks/                  # 이벤트 훅 (Claude, Cursor, Codex용)
+├── hooks/                  # 이벤트 훅 (Claude, Cursor용)
 │   └── notify.sh           # macOS 알림 (terminal-notifier)
 │
 └── plugins/                # OpenCode 전용 플러그인
@@ -125,7 +125,7 @@ src/
 
 | 디렉토리        |        Claude        |        Cursor        |        OpenCode        |        Codex         |
 | --------------- | :------------------: | :------------------: | :--------------------: | :------------------: |
-| `hooks/`        |          ✅          |          ✅          |           ❌           |          ✅          |
+| `hooks/`        |          ✅          |          ✅          |           ❌           |          ❌          |
 | `plugins/`      |          ❌          |          ❌          |           ✅           |          ❌          |
 | `agents/`       |       ✅ 원본        |       ✅ 원본        |        ✅ 변환         |       ✅ 변환        |
 | `rules/`        |          ✅          |          ✅          |           ✅           |          ✅          |
